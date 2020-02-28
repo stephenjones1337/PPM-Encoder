@@ -1,0 +1,29 @@
+﻿<Window x:Class="Project_Encode.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project_Encode"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="455" Width="800">
+    <Grid>
+        <Menu HorizontalAlignment="Left" Height="20" Margin="0,0" VerticalAlignment="Top" Width="800">
+            <MenuItem Header="File">
+                <MenuItem Header="Open File" Name="menuOpenFile" Click="MenuOpenFile_Click"/>
+                <MenuItem Header="Save File" Name="mnuSaveFile"  Click="MnuSaveFile_Click"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="New Message" Click="MnuEdit_Click"/>
+            </MenuItem>
+            <MenuItem Header="Help" Click="MnuHelp_Click"/>
+        </Menu>
+        <Image x:Name="imgBox" Margin="10,25,10,27.5" MouseMove="ImgBox_MouseMove" MouseDown="ImgBox_MouseDown" Grid.RowSpan="3"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,400,0,0" TextWrapping="Wrap" Text="X" VerticalAlignment="Top" FontFamily="Consolas" IsEnabled="False"/>
+        <TextBlock x:Name="txtX" HorizontalAlignment="Left" Margin="20,400,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Consolas" IsEnabled="False"/>
+        <TextBlock HorizontalAlignment="Left" Margin="55,400,0,0" TextWrapping="Wrap" Text="Y" VerticalAlignment="Top" FontFamily="Consolas" IsEnabled="False"/>
+        <TextBlock x:Name="txtY" HorizontalAlignment="Left" Margin="65,400,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Consolas" IsEnabled="False"/>
+        <TextBlock x:Name="txtChosenPoint" HorizontalAlignment="Left" Margin="141,400,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Consolas"/>
+        <TextBox x:Name="txtHashBox" HorizontalAlignment="Left" Height="14" Margin="490,404,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" FontFamily="Consolas" FontSize="10" IsReadOnly="True"/>
+
+    </Grid>
+</Window>
