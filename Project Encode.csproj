@@ -66,6 +66,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BitmapConverter.cs" />
+    <Compile Include="Compresser.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="ConvertPPM.cs" />
     <Compile Include="Encode.cs" />

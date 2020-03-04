@@ -26,8 +26,8 @@ namespace Project_Encode {
         }
         #region METHODS
         public Bitmap PPMtoBitmap() {
-            ////check which ppm file it is
-            if (PpmCheck()) {
+            //check which ppm file it is
+            if (PpmCheck() == 0) {
                 //convert to p3
                 return P3Conversion();
             } else {
@@ -81,19 +81,15 @@ namespace Project_Encode {
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
 
-                    int r = Convert.ToInt32(RGBGrabber()),
-                        g = Convert.ToInt32(RGBGrabber()),
-                        b = Convert.ToInt32(RGBGrabber());
+                    int r = RGBGrabber(),
+                        g = RGBGrabber(),
+                        b = RGBGrabber();
 
                     Color col = Color.FromArgb(r,g,b);                        
                     bitmap.SetPixel(x,y,col);
                 }
             }
-            for (int y = 390; y < bitmap.Height; y++) {
-                for (int x = 20; x < bitmap.Width; x++) {
-                    var tempCol = bitmap.GetPixel(x,y);
-                }
-            }
+
             reader.Close();
             return bitmap;
         }
@@ -147,34 +143,33 @@ namespace Project_Encode {
             reader.Close();
             return bitmap;
         }
-        private string RGBGrabber() {
+        private int RGBGrabber() {
             char temp;
             string colVal = "";
 
             while((temp = reader.ReadChar()) != '\n') {
                 colVal += temp;
             }
-            return colVal;
+            return int.Parse(colVal);
         }
         #endregion
         #region ASCII STUFF
-        private bool PpmCheck() {
+        private int PpmCheck() {
             //Debug.WriteLine(File);
             reader = new BinaryReader(new FileStream(File, FileMode.Open));
-
-
             //get the first two chars of the file
             char[] id = reader.ReadChars(2);
 
             //the second chars should be '3' or '6'
             if (id[1] == '3') {
-                return true;
+                return 0;
             }else if (id[1] == '6') {
-                return false;
+                return 1;
             } else {
                 throw new Exception("Data in improper format - Is this a P3 or P6 PPM file?");
             }
         }
+
         private void PopulateArray(Bitmap img) {
             //scan bitmap and store its contents to array
             for (int y = 0; y < img.Height; y++) {
@@ -195,7 +190,7 @@ namespace Project_Encode {
             byte[] bytes = {colArr[x,y].R, colArr[x,y].G, colArr[x,y].B};
             return bytes;
         } 
-        private Container BuildPPM(bool ppmType) {
+        private Container BuildPPM(int ppmType) {
             StringBuilder str = new StringBuilder();
             Container myContainer = new Container();
 
@@ -203,12 +198,20 @@ namespace Project_Encode {
             str = BuildStart(ppmType, str);
 
             //true for P3, false for P6
-            if (ppmType) {
+            if (ppmType == 0) {
                 reader.Close();
                 return BuildString(str, myContainer);
-            } else {
+            } else if (ppmType == 1){
                 reader.Close();
-                return BuildBytes(str,myContainer);
+                return BuildBytes(str, myContainer);
+            }else if(ppmType == 2) {
+                //build compressed string
+                return null;
+            }else if (ppmType == 3) {
+                return null;
+            } else {
+                //show error: wrong file type or cancel or something
+                return null;
             }
         }
         private Container BuildString(StringBuilder str, Container myContainer) {
@@ -243,16 +246,26 @@ namespace Project_Encode {
             Debug.WriteLine($"{myBytes.Count} bytes saved myBytes");
             return myContainer;
         }
-        private StringBuilder BuildStart(bool p3, StringBuilder str) {
+        private StringBuilder BuildStart(int ppmType, StringBuilder str) {
             string newLine = "\n";
 
-            if (p3) {
+            if (ppmType == 0) {
                 str.Append("P3"+newLine);
                 str.Append("# "+newLine);
                 str.Append($"{colArr.GetLength(0)} {colArr.GetLength(1)}"+newLine);
                 str.Append("255"+newLine);
-            } else {
+            } else if (ppmType == 1){
                 str.Append("P6"+newLine);
+                str.Append("# "+newLine);
+                str.Append($"{colArr.GetLength(0)} {colArr.GetLength(1)}"+newLine);
+                str.Append("255"+newLine);
+            }else if(ppmType == 2) {
+                str.Append("P7"+newLine);
+                str.Append("# "+newLine);
+                str.Append($"{colArr.GetLength(0)} {colArr.GetLength(1)}"+newLine);
+                str.Append("255"+newLine);
+            }else if (ppmType == 3) {
+                str.Append("P8"+newLine);
                 str.Append("# "+newLine);
                 str.Append($"{colArr.GetLength(0)} {colArr.GetLength(1)}"+newLine);
                 str.Append("255"+newLine);

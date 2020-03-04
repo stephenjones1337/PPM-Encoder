@@ -1,17 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Drawing;
 using System.Security.Cryptography;
 using System.Diagnostics;
@@ -65,9 +57,12 @@ namespace Project_Encode {
             FileClass fileHandler = new FileClass();
             
             //if bitmap exists, convert to PPM and save file
-            if (temp != null && bitty != null) {
-                ConvertPPM convert = new ConvertPPM(temp);
+            if (temp != null || bitty != null) {
+                ConvertPPM convert = new ConvertPPM(bitty);
                 convert.File = currentPath;
+                //ask if wish to save as p3 or 6, then ask if wish to compress it
+                //change CheckPPM (in convertPPM class) or add new function to check ppm type
+                //
                 fileHandler.SaveFile(convert.BitmapToPPM());
             }
         }
