@@ -136,6 +136,9 @@ namespace Project_Encode {
                     //make the color
                     pixels.Add(ColorFromString(r,g,b));
                     count = 0;
+                    r = "";
+                    g = "";
+                    b = "";
                 } else {
                     count++;
                 }

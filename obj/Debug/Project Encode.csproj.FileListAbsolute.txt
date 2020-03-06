@@ -15,3 +15,20 @@ C:\Users\MCA\source\repos\Project Encode\obj\Debug\Project Encode.csproj.Generat
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\Project Encode.csproj.CoreCompileInputs.cache
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\Project Encode.exe
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\Project Encode.pdb
+D:\Code stuff\PPM-Encoder\bin\Debug\Project Encode.exe.config
+D:\Code stuff\PPM-Encoder\bin\Debug\Project Encode.exe
+D:\Code stuff\PPM-Encoder\bin\Debug\Project Encode.pdb
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.csprojAssemblyReference.cache
+D:\Code stuff\PPM-Encoder\obj\Debug\MainWindow.g.cs
+D:\Code stuff\PPM-Encoder\obj\Debug\PopupInput.g.cs
+D:\Code stuff\PPM-Encoder\obj\Debug\App.g.cs
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode_MarkupCompile.cache
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode_MarkupCompile.lref
+D:\Code stuff\PPM-Encoder\obj\Debug\MainWindow.baml
+D:\Code stuff\PPM-Encoder\obj\Debug\PopupInput.baml
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.g.resources
+D:\Code stuff\PPM-Encoder\obj\Debug\Project_Encode.Properties.Resources.resources
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.csproj.GenerateResource.cache
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.csproj.CoreCompileInputs.cache
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.exe
+D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.pdb
