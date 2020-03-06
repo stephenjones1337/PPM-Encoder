@@ -21,7 +21,6 @@ namespace Project_Encode {
         string message;
         string currentPath;
         bool   isLoaded = false;
-        bool   compress = true;
         readonly string PasswordHash = "P@@Sw0rd";
         readonly string SaltKey = "S@LT&KEY";
         readonly string VIKey = "@1B2c3D4e5F6g7H8";
@@ -54,6 +53,9 @@ namespace Project_Encode {
             }
         }
         
+        private int ContainerByteSize(Container container) {
+            return container.Header.Length + container.AsciiData.Length + container.ByteData.Count;
+        }
         private void MnuSaveFile_Click(object sender, RoutedEventArgs e) {
             FileClass fileHandler = new FileClass();
             
@@ -64,12 +66,23 @@ namespace Project_Encode {
                 //ask if wish to save as p3 or 6, then ask if wish to compress it
                 //change CheckPPM (in convertPPM class) or add new function to check ppm type
                 //
-                if (compress) {
-                    Compresser compresser = new Compresser();
+                Compresser compresser = new Compresser();
+                Container compressedContainer = compresser.Compress(convert.BitmapToPPM());
+                Container decompressedContainer = convert.BitmapToPPM();
+
+                int compressedBytes = ContainerByteSize(compressedContainer);
+                int decompressedBytes = ContainerByteSize(decompressedContainer);
+
+                ConfirmCompress popup = new ConfirmCompress(compressedBytes, decompressedBytes);
+                popup.Owner = this;
+                popup.ShowDialog();
+                
+
+                if (popup.chooseCompress) {
                    
-                    fileHandler.SaveFile(compresser.Compress(convert.BitmapToPPM()));
+                    fileHandler.SaveFile(compressedContainer);
                 } else {
-                    fileHandler.SaveFile(convert.BitmapToPPM());
+                    fileHandler.SaveFile(decompressedContainer);
                 }
 
 
