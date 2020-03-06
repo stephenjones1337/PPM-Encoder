@@ -21,6 +21,7 @@ namespace Project_Encode {
         string message;
         string currentPath;
         bool   isLoaded = false;
+        bool   compress = true;
         readonly string PasswordHash = "P@@Sw0rd";
         readonly string SaltKey = "S@LT&KEY";
         readonly string VIKey = "@1B2c3D4e5F6g7H8";
@@ -57,13 +58,21 @@ namespace Project_Encode {
             FileClass fileHandler = new FileClass();
             
             //if bitmap exists, convert to PPM and save file
-            if (temp != null || bitty != null) {
-                ConvertPPM convert = new ConvertPPM(bitty);
+            if (temp != null) {
+                ConvertPPM convert = new ConvertPPM(temp);
                 convert.File = currentPath;
                 //ask if wish to save as p3 or 6, then ask if wish to compress it
                 //change CheckPPM (in convertPPM class) or add new function to check ppm type
                 //
-                fileHandler.SaveFile(convert.BitmapToPPM());
+                if (compress) {
+                    Compresser compresser = new Compresser();
+                   
+                    fileHandler.SaveFile(compresser.Compress(convert.BitmapToPPM()));
+                } else {
+                    fileHandler.SaveFile(convert.BitmapToPPM());
+                }
+
+
             }
         }
         

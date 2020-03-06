@@ -42,12 +42,9 @@ namespace Project_Encode {
             saveFile = new SaveFileDialog {
                 Filter = "PPM (*.ppm)|*.ppm|All files(*.*)|*.*"
             };
-            Compresser compresser = new Compresser();
-
-            string asciis = compresser.Compress(myContainer);
             //unpack container
-            //string asciis = myContainer.String;
-            //Queue<byte> bytes = myContainer.Queue;
+            string asciis = myContainer.Header+myContainer.AsciiData;
+            Queue<byte> bytes = myContainer.ByteData;
 
             if (saveFile.ShowDialog() == DialogResult.OK) {
                 if ((stream = saveFile.OpenFile()) != null) {
@@ -57,15 +54,15 @@ namespace Project_Encode {
                         stream.WriteByte(bit);
                     }
                     stream.Close();
-                    //if P6, append the bytes with binary writer to file
-                    //if (bytes.Count > 0) {
-                    //    binWriter = new BinaryWriter(new FileStream(saveFile.FileName, FileMode.Append));                        
-                    //    //write bytes till queue is empty
-                    //    while(bytes.Count > 0) {
-                    //        binWriter.Write(bytes.Dequeue());
-                    //    }
-                    //    binWriter.Close();
-                    //}
+                    //if binary, append the bytes with binary writer to file
+                    if (bytes.Count > 0) {
+                        binWriter = new BinaryWriter(new FileStream(saveFile.FileName, FileMode.Append));                        
+                        //write bytes till queue is empty
+                        while(bytes.Count > 0) {
+                            binWriter.Write(bytes.Dequeue());
+                        }
+                        binWriter.Close();
+                    }
 
                 }
             }

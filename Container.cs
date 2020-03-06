@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Project_Encode {
      class Container {
-        public string String {get;set;}
-        public Queue<byte> Queue {get;set;}
-        public Container(string str, Queue<byte> que) {
-            String = str;
-            Queue = que;
+        public string Header {get;set;}
+        public string AsciiData {get;set;}
+        public Queue<byte> ByteData {get;set;}
+        public Container(string str, Queue<byte> que, string header) {
+            Header = header;
+            AsciiData = str;
+            ByteData = que;
         }
         public Container() {
 

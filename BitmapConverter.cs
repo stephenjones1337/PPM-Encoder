@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Project_Encode {
     class BitmapConverter {
-        private Bitmap bitmap;
+        private readonly Bitmap bitmap;
         public BitmapConverter(Bitmap map) {
             bitmap = map;
         }
@@ -40,7 +40,7 @@ namespace Project_Encode {
             StringBuilder str   = new StringBuilder();
 
             //do the header part
-            container.String =  "P3"+
+            container.AsciiData =  "P3"+
                                 "# comment goes here\n"+
                                 $"{bmp.Width} {bmp.Height}\n"+
                                 "255";
@@ -64,7 +64,7 @@ namespace Project_Encode {
             Container container = new Container();
             Queue<byte> bytes   = new Queue<byte>();
 
-            container.String =  "P6\n"+
+            container.AsciiData =  "P6\n"+
                                 "# comment goes here\n"+
                                 $"{bmp.Width} {bmp.Height}\n"+
                                 "255";

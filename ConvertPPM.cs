@@ -195,8 +195,8 @@ namespace Project_Encode {
             Container myContainer = new Container();
 
             //construct the "header" portion of the ppm file
-            str = BuildStart(ppmType, str);
-
+            myContainer.Header = BuildStart(ppmType, str).ToString();
+            str.Clear();
             //true for P3, false for P6
             if (ppmType == 0) {
                 reader.Close();
@@ -204,11 +204,6 @@ namespace Project_Encode {
             } else if (ppmType == 1){
                 reader.Close();
                 return BuildBytes(str, myContainer);
-            }else if(ppmType == 2) {
-                //build compressed string
-                return null;
-            }else if (ppmType == 3) {
-                return null;
             } else {
                 //show error: wrong file type or cancel or something
                 return null;
@@ -222,10 +217,10 @@ namespace Project_Encode {
                     str.Append(ColToString(x,y));
                 }                
             }
-            myContainer.String = str.ToString();
+            myContainer.AsciiData = str.ToString();
 
             //add empty queue for saveFile checks
-            myContainer.Queue  = new Queue<byte>();
+            myContainer.ByteData  = new Queue<byte>();
             return myContainer;
         }
         private Container BuildBytes(StringBuilder str, Container myContainer) {
@@ -241,8 +236,9 @@ namespace Project_Encode {
                     }
                 }                
             }
-            myContainer.String = str.ToString();
-            myContainer.Queue = myBytes;
+            myContainer.AsciiData = str.ToString();
+            myContainer.ByteData = myBytes;
+            //TODO: take byte count and compare to post compression to see what you want to save
             Debug.WriteLine($"{myBytes.Count} bytes saved myBytes");
             return myContainer;
         }
