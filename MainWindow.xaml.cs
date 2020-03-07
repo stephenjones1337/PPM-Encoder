@@ -7,6 +7,8 @@ using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading;
 
 namespace Project_Encode {
     /// <summary>
@@ -63,29 +65,27 @@ namespace Project_Encode {
             if (temp != null) {
                 ConvertPPM convert = new ConvertPPM(temp);
                 convert.File = currentPath;
-                //ask if wish to save as p3 or 6, then ask if wish to compress it
-                //change CheckPPM (in convertPPM class) or add new function to check ppm type
-                //
-                Compresser compresser = new Compresser();
+                //get compressed and decompressed containers
+                Compresser compresser = new Compresser();                
+
                 Container compressedContainer = compresser.Compress(convert.BitmapToPPM());
                 Container decompressedContainer = convert.BitmapToPPM();
 
+                //get the byte size of each
                 int compressedBytes = ContainerByteSize(compressedContainer);
                 int decompressedBytes = ContainerByteSize(decompressedContainer);
 
+                //show comparison to user and allow them to choose
                 ConfirmCompress popup = new ConfirmCompress(compressedBytes, decompressedBytes);
                 popup.Owner = this;
                 popup.ShowDialog();
                 
-
                 if (popup.chooseCompress) {
                    
                     fileHandler.SaveFile(compressedContainer);
                 } else {
                     fileHandler.SaveFile(decompressedContainer);
                 }
-
-
             }
         }
         
@@ -203,5 +203,22 @@ namespace Project_Encode {
 			}
 			return Convert.ToBase64String(cipherTextBytes);
 		}
+        //private void ProgressBar() {
+        //    BackgroundWorker worker = new BackgroundWorker();
+        //    worker.WorkerReportsProgress = true;
+        //    worker.DoWork += worker_DoWork;
+        //    worker.ProgressChanged+= worker_ProgressChanged;
+        //    worker.RunWorkerAsync();
+        //}
+        //void worker_DoWork(object sender, DoWorkEventArgs e) {
+        //    for (int i = 0; i < 100; i++) {
+        //        (sender as BackgroundWorker).ReportProgress(i);
+        //        Thread.Sleep(100);
+        //    }
+        //}
+
+        //void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+        //    pbStatus.Value = e.ProgressPercentage;
+        //}
     }
 }

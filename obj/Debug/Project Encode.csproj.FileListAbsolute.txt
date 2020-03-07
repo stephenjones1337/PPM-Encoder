@@ -34,3 +34,5 @@ D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.exe
 D:\Code stuff\PPM-Encoder\obj\Debug\Project Encode.pdb
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\ConfirmCompress.g.cs
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\ConfirmCompress.baml
+C:\Users\MCA\source\repos\Project Encode\obj\Debug\ProgressBar.g.cs
+C:\Users\MCA\source\repos\Project Encode\obj\Debug\ProgressBar.baml

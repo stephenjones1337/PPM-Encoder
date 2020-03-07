@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project_Encode"
         mc:Ignorable="d"
-        Title="Confirm Compress" Height="200" Width="400">
+        Title="Compress?" Height="200" Width="400">
     <Grid>
         <Button x:Name="btnOK" Content="OK" HorizontalAlignment="Left" Margin="80,142,0,0" VerticalAlignment="Top" Width="75" Click="BtnOK_Click"/>
         <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="240,142,0,0" VerticalAlignment="Top" Width="75" Click="BtnCancel_Click"/>
-        <TextBox x:Name="txtCompress" HorizontalAlignment="Left" Height="23" Margin="50,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300" FontFamily="Consolas" IsEnabled="False"/>
-        <TextBox x:Name="txtDecompress" HorizontalAlignment="Left" Height="23" Margin="50,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300" FontFamily="Consolas" IsEnabled="False"/>
-        <Label Content="Compressed" HorizontalAlignment="Left" Margin="50,22,0,0" VerticalAlignment="Top" Height="25" FontFamily="Consolas"/>
-        <Label Content="Decompressed" HorizontalAlignment="Left" Margin="50,70,0,0" VerticalAlignment="Top" FontFamily="Consolas"/>
+        <TextBox x:Name="txtCompress" HorizontalAlignment="Left" Height="23" Margin="50,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300" FontFamily="Consolas" IsEnabled="False"/>
+        <TextBox x:Name="txtDecompress" HorizontalAlignment="Left" Height="23" Margin="50,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300" FontFamily="Consolas" IsEnabled="False"/>
+        <Label Content="Compressed" HorizontalAlignment="Left" Margin="50,35,0,0" VerticalAlignment="Top" Height="25" FontFamily="Consolas"/>
+        <Label Content="Decompressed" HorizontalAlignment="Left" Margin="50,83,0,0" VerticalAlignment="Top" FontFamily="Consolas"/>
+        <Label Content="Would you like to compress your image?" HorizontalAlignment="Left" Margin="70,6,0,0" VerticalAlignment="Top" FontFamily="Consolas"/>
 
     </Grid>
 </Window>
