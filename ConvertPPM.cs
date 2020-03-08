@@ -40,6 +40,10 @@ namespace Project_Encode {
             return BuildPPM(PpmCheck());
 
         }
+        public Container NonPpmToPpm(int ppmType) {
+            PopulateArray(myMap);
+            return BuildPPM(ppmType);
+        }
         #region PRIVATES
         #region BINARY STUFF
         private Bitmap P3Conversion() {
@@ -169,7 +173,6 @@ namespace Project_Encode {
                 throw new Exception("Data in improper format - Is this a P3 or P6 PPM file?");
             }
         }
-
         private void PopulateArray(Bitmap img) {
             //scan bitmap and store its contents to array
             for (int y = 0; y < img.Height; y++) {
@@ -197,12 +200,12 @@ namespace Project_Encode {
             //construct the "header" portion of the ppm file
             myContainer.Header = BuildStart(ppmType, str).ToString();
             str.Clear();
+            if (reader != null)
+                reader.Close();
             //true for P3, false for P6
             if (ppmType == 0) {
-                reader.Close();
                 return BuildString(str, myContainer);
             } else if (ppmType == 1){
-                reader.Close();
                 return BuildBytes(str, myContainer);
             } else {
                 //show error: wrong file type or cancel or something
@@ -252,16 +255,6 @@ namespace Project_Encode {
                 str.Append("255"+newLine);
             } else if (ppmType == 1){
                 str.Append("P6"+newLine);
-                str.Append("# "+newLine);
-                str.Append($"{colArr.GetLength(0)} {colArr.GetLength(1)}"+newLine);
-                str.Append("255"+newLine);
-            }else if(ppmType == 2) {
-                str.Append("P7"+newLine);
-                str.Append("# "+newLine);
-                str.Append($"{colArr.GetLength(0)} {colArr.GetLength(1)}"+newLine);
-                str.Append("255"+newLine);
-            }else if (ppmType == 3) {
-                str.Append("P8"+newLine);
                 str.Append("# "+newLine);
                 str.Append($"{colArr.GetLength(0)} {colArr.GetLength(1)}"+newLine);
                 str.Append("255"+newLine);

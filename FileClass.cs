@@ -12,10 +12,15 @@ namespace Project_Encode {
         private SaveFileDialog saveFile;
         private Stream stream;
         private BinaryWriter binWriter;
+        private bool _isPPM;
         public string FilePath {get;set;}
+        public bool   IsPPM {get {return _isPPM;} }
         public FileClass() {
         }
-
+        private bool CheckExtension(string filePath) {
+            if (filePath.ToLower().EndsWith(".ppm")) return true;
+            else return false;
+        }
         public Bitmap LoadFile() {
             openFile = new OpenFileDialog{ 
                 Filter = "PPM (*.PPM)|*.PPM|All files (*.*)|*.*" 
@@ -23,12 +28,18 @@ namespace Project_Encode {
             try {
                 if (openFile.ShowDialog() == DialogResult.OK) {
                     FilePath = openFile.FileName;
-                    var binRead = new BinaryReader(new FileStream(FilePath, FileMode.Open));
-                    Debug.WriteLine(binRead.BaseStream.Length + "bytes in original file.");
-                    ConvertPPM conv = new ConvertPPM(FilePath);
-                    binRead.Close();
                     openFile.Dispose();
-                    return conv.PPMtoBitmap();
+                    if (CheckExtension(FilePath)) {
+                        _isPPM = true;
+                        ConvertPPM conv = new ConvertPPM(FilePath);
+                        return conv.PPMtoBitmap();
+                    } else {
+                        _isPPM = false;
+                        return new Bitmap(FilePath);
+                    }
+                    //var binRead = new BinaryReader(new FileStream(FilePath, FileMode.Open));
+                    //Debug.WriteLine(binRead.BaseStream.Length + "bytes in original file.");
+                    //binRead.Close();
                 }
                 return null;
 

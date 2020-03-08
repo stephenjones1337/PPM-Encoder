@@ -15,7 +15,8 @@ namespace Project_Encode {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        PopupInput popup;
+        FileClass fileHandler;
+        PopupInput popupInput;
         Bitmap bitty;
         Bitmap temp;
         int    letterIncrement;
@@ -31,7 +32,7 @@ namespace Project_Encode {
             InitializeComponent();
         }
         private void MenuOpenFile_Click(object sender, RoutedEventArgs e) {
-            FileClass fileHandler = new FileClass();
+            fileHandler = new FileClass();
             
             //attempt to load chosen file
             try {
@@ -45,7 +46,7 @@ namespace Project_Encode {
                     currentPath = fileHandler.FilePath;
                     letterIncrement = (int)Math.Round(((double)bitty.Width/5) + ((double)bitty.Height/5)/5);
                     maxLength = ((bitty.Width * bitty.Height) / letterIncrement)-1;
-                    isLoaded= true;
+                    isLoaded = true;
                 }
         
             }catch(IOException){ 
@@ -59,17 +60,33 @@ namespace Project_Encode {
             return container.Header.Length + container.AsciiData.Length + container.ByteData.Count;
         }
         private void MnuSaveFile_Click(object sender, RoutedEventArgs e) {
-            FileClass fileHandler = new FileClass();
+            FileClass fileHandler = new FileClass();           
             
+
             //if bitmap exists, convert to PPM and save file
             if (temp != null) {
+                Container compressedContainer;
+                Container decompressedContainer;
                 ConvertPPM convert = new ConvertPPM(temp);
                 convert.File = currentPath;
                 //get compressed and decompressed containers
                 Compresser compresser = new Compresser();                
+                if (fileHandler.IsPPM) {
+                    compressedContainer = compresser.Compress(convert.BitmapToPPM());
+                    decompressedContainer = convert.BitmapToPPM();
 
-                Container compressedContainer = compresser.Compress(convert.BitmapToPPM());
-                Container decompressedContainer = convert.BitmapToPPM();
+                } else {
+                    popupInput = new PopupInput(1);
+                    bool check = int.TryParse(popupInput.result, out int ppmType);
+                    popupInput.ShowDialog();
+                    if (check){
+                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(ppmType));
+                        decompressedContainer = convert.NonPpmToPpm(ppmType);
+                    } else {
+                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(1));
+                        decompressedContainer = convert.NonPpmToPpm(1);
+                    }
+                }
 
                 //get the byte size of each
                 int compressedBytes = ContainerByteSize(compressedContainer);
@@ -106,8 +123,8 @@ namespace Project_Encode {
         private void MnuEdit_Click(object sender, RoutedEventArgs e) {
             //generate and show pop up
             if (isLoaded) {
-                popup = new PopupInput(maxLength);
-                popup.Show();
+                popupInput = new PopupInput(maxLength);
+                popupInput.Show();
             } else {
                 ShowPopUpMessage("You must load an image before setting your message.","Load Image");
             }
@@ -140,9 +157,9 @@ namespace Project_Encode {
         #endregion
         private void EncodeMessage() {
             try {
-                if (popup != null) {
+                if (popupInput != null) {
                     //grab message (dummy check)
-                    message = popup.result;
+                    message = popupInput.result;
                     FileClass fh = new FileClass();
                     
                     //pass args to encoder
