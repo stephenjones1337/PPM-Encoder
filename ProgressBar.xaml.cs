@@ -21,26 +21,25 @@ namespace Project_Encode {
     public partial class ProgressBar : Window {
         public ProgressBar() {
             InitializeComponent();
+            Start();
         }
-
-        private void Window_ContentRendered(object sender, EventArgs e) {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.WorkerReportsProgress = true;
-            worker.DoWork += worker_DoWork;
-            worker.ProgressChanged+= worker_ProgressChanged;
-
-            worker.RunWorkerAsync();
-        }
-
-        void worker_DoWork(object sender, DoWorkEventArgs e) {
-            for (int i = 0; i < 100; i++) {
-                (sender as BackgroundWorker).ReportProgress(i);
+        public void DoSomething(IProgress<int> progress)
+        {
+            for (int i = 1; i <= 100; i++)
+            {
                 Thread.Sleep(100);
+                if (progress != null)
+                    progress.Report(i);
             }
         }
-
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            pbStatus.Value = e.ProgressPercentage;
+        private async void Start() {
+            pbStatus.Value = 0;
+            var progress = new Progress<int>(percent =>
+            {
+                pbStatus.Value = percent;
+ 
+            });
+            await Task.Run(() => DoSomething(progress));
         }
     }
 }

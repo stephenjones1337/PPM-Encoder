@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project_Encode"
         mc:Ignorable="d"
-        Title="Progress Bar" Height="100" Width="300"
-        ContentRendered="Window_ContentRendered">
+        Title="Progress Bar" Height="100" Width="300">
     <Grid Margin="20,25">
-        <ProgressBar x:Name="pbStatus" Minimum="0" Maximum="100" Value="75"/>
+        <ProgressBar x:Name="pbStatus"/>
     </Grid>
 </Window>

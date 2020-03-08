@@ -104,7 +104,7 @@ namespace Project_Encode {
         }
         
         private void MnuEdit_Click(object sender, RoutedEventArgs e) {
-            //generate and show pop up    
+            //generate and show pop up
             if (isLoaded) {
                 popup = new PopupInput(maxLength);
                 popup.Show();

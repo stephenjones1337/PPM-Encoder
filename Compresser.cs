@@ -17,16 +17,15 @@ namespace Project_Encode {
 
         //when decompressing bytes, always put at least 1 before the pixel color data, and each grouping.
         //this way, we can copy the run of pixels as well as the colors
-
-        public Compresser() {
-
+        ProgressBar pbWin;
+        public Compresser() {            
         }
         public Container Compress(Container container) {
             if (container.Header[1] == '3') {
                 return CompressAscii(container);
             } else if(container.Header[1] == '6') {
                 return CompressBytes(container);
-            } else {
+            } else {                
                 return null;
             }
         }
@@ -57,7 +56,6 @@ namespace Project_Encode {
             }
             container.ByteData  = new Queue<byte>();
             container.AsciiData = strBuilder.ToString();
-
             return container;
         }
         private Container CompressListForBytes(List<Color> pixels, Container container) {
