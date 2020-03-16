@@ -17,22 +17,23 @@ namespace Project_Encode {
 
         //when decompressing bytes, always put at least 1 before the pixel color data, and each grouping.
         //this way, we can copy the run of pixels as well as the colors
-
-        public Compresser() {
-
+        ProgressBar pbWin;
+        public Compresser() {            
         }
         public Container Compress(Container container) {
             if (container.Header[1] == '3') {
                 return CompressAscii(container);
-            } else {
+            } else if(container.Header[1] == '6') {
                 return CompressBytes(container);
+            } else {                
+                return null;
             }
         }
-        public Container CompressAscii(Container container) {
+        private Container CompressAscii(Container container) {
             List<Color> colList = AsciiToColorList(container);
             return CompressListForAscii(colList, container);
         }
-        public Container CompressBytes(Container container) {
+        private Container CompressBytes(Container container) {
             List<Color> colList = BytesToColorList(container);
             return CompressListForBytes(colList, container);
         }
@@ -42,6 +43,7 @@ namespace Project_Encode {
 
             for (int i = 0; i < pixels.Count; i+=count) {
                 count = 0;
+                //scan & count each identical pixel from current till break
                 for (int j = i; j < pixels.Count; j++) {
                     if (pixels[i] == pixels[j]) {
                         count++;
@@ -49,20 +51,20 @@ namespace Project_Encode {
                         break;
                     }
                 }
+                //add the colors to string
                 AddColors(strBuilder, count, pixels[i]);
             }
             container.ByteData  = new Queue<byte>();
             container.AsciiData = strBuilder.ToString();
-
             return container;
         }
-        //make a check to see if count is above 255, if so, get the excess as many times as it takes and repeat
         private Container CompressListForBytes(List<Color> pixels, Container container) {
             Queue<byte> bytes = new Queue<byte>();
             int count;
 
             for (int i = 0; i < pixels.Count; i+=count) {
                 count = 0;
+                //scan & count each identical pixel from current till break
                 for (int j = i; j < pixels.Count; j++) {
                     if (pixels[i] == pixels[j]) {
                         count++;
@@ -70,6 +72,7 @@ namespace Project_Encode {
                         break;
                     }
                 }
+                //if count is 256 or above, split it up so its pieces may be represented by one byte
                 if (count < 256) {
                     AddColors(bytes, count, pixels[i]);
                 } else {
@@ -78,7 +81,9 @@ namespace Project_Encode {
                     for (int j = 0; j < divideNum; j++) {
                         AddColors(bytes, 255, pixels[i]);
                     }
-                    AddColors(bytes, leftover, pixels[i]);
+                    //add any leftover pixels
+                    if (leftover > 0)
+                        AddColors(bytes, leftover, pixels[i]);
                 }
             }
             container.ByteData = bytes;

@@ -57,6 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ConfirmCompress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +71,9 @@
     </Compile>
     <Compile Include="BitmapConverter.cs" />
     <Compile Include="Compresser.cs" />
+    <Compile Include="ConfirmCompress.xaml.cs">
+      <DependentUpon>ConfirmCompress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Container.cs" />
     <Compile Include="ConvertPPM.cs" />
     <Compile Include="Encode.cs" />
@@ -79,10 +86,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PopupInput.xaml.cs">
       <DependentUpon>PopupInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressBar.xaml.cs">
+      <DependentUpon>ProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

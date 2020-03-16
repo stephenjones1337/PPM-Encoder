@@ -7,13 +7,16 @@ using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading;
 
 namespace Project_Encode {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        PopupInput popup;
+        FileClass fileHandler;
+        PopupInput popupInput;
         Bitmap bitty;
         Bitmap temp;
         int    letterIncrement;
@@ -21,7 +24,6 @@ namespace Project_Encode {
         string message;
         string currentPath;
         bool   isLoaded = false;
-        bool   compress = true;
         readonly string PasswordHash = "P@@Sw0rd";
         readonly string SaltKey = "S@LT&KEY";
         readonly string VIKey = "@1B2c3D4e5F6g7H8";
@@ -30,7 +32,7 @@ namespace Project_Encode {
             InitializeComponent();
         }
         private void MenuOpenFile_Click(object sender, RoutedEventArgs e) {
-            FileClass fileHandler = new FileClass();
+            fileHandler = new FileClass();
             
             //attempt to load chosen file
             try {
@@ -44,7 +46,7 @@ namespace Project_Encode {
                     currentPath = fileHandler.FilePath;
                     letterIncrement = (int)Math.Round(((double)bitty.Width/5) + ((double)bitty.Height/5)/5);
                     maxLength = ((bitty.Width * bitty.Height) / letterIncrement)-1;
-                    isLoaded= true;
+                    isLoaded = true;
                 }
         
             }catch(IOException){ 
@@ -54,25 +56,53 @@ namespace Project_Encode {
             }
         }
         
+        private int ContainerByteSize(Container container) {
+            return container.Header.Length + container.AsciiData.Length + container.ByteData.Count;
+        }
         private void MnuSaveFile_Click(object sender, RoutedEventArgs e) {
-            FileClass fileHandler = new FileClass();
+            FileClass fileHandler = new FileClass();           
             
+
             //if bitmap exists, convert to PPM and save file
             if (temp != null) {
+                Container compressedContainer;
+                Container decompressedContainer;
                 ConvertPPM convert = new ConvertPPM(temp);
                 convert.File = currentPath;
-                //ask if wish to save as p3 or 6, then ask if wish to compress it
-                //change CheckPPM (in convertPPM class) or add new function to check ppm type
-                //
-                if (compress) {
-                    Compresser compresser = new Compresser();
-                   
-                    fileHandler.SaveFile(compresser.Compress(convert.BitmapToPPM()));
+                //get compressed and decompressed containers
+                Compresser compresser = new Compresser();                
+                if (fileHandler.IsPPM) {
+                    compressedContainer = compresser.Compress(convert.BitmapToPPM());
+                    decompressedContainer = convert.BitmapToPPM();
+
                 } else {
-                    fileHandler.SaveFile(convert.BitmapToPPM());
+                    popupInput = new PopupInput(1);
+                    bool check = int.TryParse(popupInput.result, out int ppmType);
+                    popupInput.ShowDialog();
+                    if (check){
+                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(ppmType));
+                        decompressedContainer = convert.NonPpmToPpm(ppmType);
+                    } else {
+                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(1));
+                        decompressedContainer = convert.NonPpmToPpm(1);
+                    }
                 }
 
+                //get the byte size of each
+                int compressedBytes = ContainerByteSize(compressedContainer);
+                int decompressedBytes = ContainerByteSize(decompressedContainer);
 
+                //show comparison to user and allow them to choose
+                ConfirmCompress popup = new ConfirmCompress(compressedBytes, decompressedBytes);
+                popup.Owner = this;
+                popup.ShowDialog();
+                
+                if (popup.chooseCompress) {
+                   
+                    fileHandler.SaveFile(compressedContainer);
+                } else {
+                    fileHandler.SaveFile(decompressedContainer);
+                }
             }
         }
         
@@ -91,10 +121,10 @@ namespace Project_Encode {
         }
         
         private void MnuEdit_Click(object sender, RoutedEventArgs e) {
-            //generate and show pop up    
+            //generate and show pop up
             if (isLoaded) {
-                popup = new PopupInput(maxLength);
-                popup.Show();
+                popupInput = new PopupInput(maxLength);
+                popupInput.Show();
             } else {
                 ShowPopUpMessage("You must load an image before setting your message.","Load Image");
             }
@@ -127,9 +157,9 @@ namespace Project_Encode {
         #endregion
         private void EncodeMessage() {
             try {
-                if (popup != null) {
+                if (popupInput != null) {
                     //grab message (dummy check)
-                    message = popup.result;
+                    message = popupInput.result;
                     FileClass fh = new FileClass();
                     
                     //pass args to encoder
@@ -190,5 +220,22 @@ namespace Project_Encode {
 			}
 			return Convert.ToBase64String(cipherTextBytes);
 		}
+        //private void ProgressBar() {
+        //    BackgroundWorker worker = new BackgroundWorker();
+        //    worker.WorkerReportsProgress = true;
+        //    worker.DoWork += worker_DoWork;
+        //    worker.ProgressChanged+= worker_ProgressChanged;
+        //    worker.RunWorkerAsync();
+        //}
+        //void worker_DoWork(object sender, DoWorkEventArgs e) {
+        //    for (int i = 0; i < 100; i++) {
+        //        (sender as BackgroundWorker).ReportProgress(i);
+        //        Thread.Sleep(100);
+        //    }
+        //}
+
+        //void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+        //    pbStatus.Value = e.ProgressPercentage;
+        //}
     }
 }

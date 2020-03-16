@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\MCA\source\repos\Project Encode\App.xaml
-2-271882003
+4-1438064400
 
-13-1156532562
+15-2105654392
 151397803362
-MainWindow.xaml;PopupInput.xaml;
+ConfirmCompress.xaml;MainWindow.xaml;PopupInput.xaml;ProgressBar.xaml;
 
 True
 
