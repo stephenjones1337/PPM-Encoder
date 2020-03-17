@@ -1,0 +1,17 @@
+﻿<Window x:Class="Project_Encode.PromptPpmType"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project_Encode"
+        mc:Ignorable="d"
+        Title="PPM Type" Height="150" Width="150">
+    <Grid>
+        <Label Content="Ascii" HorizontalAlignment="Left" Margin="30,19,0,0" VerticalAlignment="Top"/>
+        <Label Content="Raw" HorizontalAlignment="Left" Margin="30,55,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.077"/>
+        <RadioButton x:Name="togAscii" Content="" HorizontalAlignment="Left" Margin="91,24,0,0" VerticalAlignment="Top" Checked="TogAscii_Checked"/>
+        <RadioButton x:Name="togRaw" Content="" HorizontalAlignment="Left" Margin="91,63,0,0" VerticalAlignment="Top" Checked="TogRaw_Checked"/>
+        <Button x:Name="btnSubmit" Content="OK" HorizontalAlignment="Left" Margin="35,89,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+
+    </Grid>
+</Window>

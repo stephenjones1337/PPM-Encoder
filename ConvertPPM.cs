@@ -9,8 +9,8 @@ using System.Diagnostics;
 
 namespace Project_Encode {
     class ConvertPPM {
-        private Bitmap  myMap;
-        private Color[,] colArr;
+        private readonly Bitmap  myMap;
+        private readonly Color[,] colArr;
         private BinaryReader reader;
         public string File {get;set;}
         public ConvertPPM(Bitmap map) {
@@ -55,7 +55,7 @@ namespace Project_Encode {
             reader.ReadChar();
 
             //eat comment
-            while((temp = reader.ReadChar()) != '\n') {
+            while(reader.ReadChar() != '\n') {
                 // yum yum
             }
 

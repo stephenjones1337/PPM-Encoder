@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\MCA\source\repos\Project Encode\obj\Debug\
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\
 Project_Encode
 none
 false
 DEBUG;TRACE
-C:\Users\MCA\source\repos\Project Encode\App.xaml
-4-1438064400
+D:\Code stuff\C#\PPM-Encoder\App.xaml
+5-414247114
 
-15-2105654392
+161095122007
 151397803362
-ConfirmCompress.xaml;MainWindow.xaml;PopupInput.xaml;ProgressBar.xaml;
+ConfirmCompress.xaml;MainWindow.xaml;PopupInput.xaml;ProgressBar.xaml;PromptPpmType.xaml;
 
 True
 

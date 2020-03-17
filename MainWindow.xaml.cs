@@ -76,12 +76,13 @@ namespace Project_Encode {
                     decompressedContainer = convert.BitmapToPPM();
 
                 } else {
-                    popupInput = new PopupInput(1);
-                    bool check = int.TryParse(popupInput.result, out int ppmType);
-                    popupInput.ShowDialog();
-                    if (check){
-                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(ppmType));
-                        decompressedContainer = convert.NonPpmToPpm(ppmType);
+                    //ask what ppm file user would like to create
+                    PromptPpmType ppmPrompt = new PromptPpmType();
+                    ppmPrompt.ShowDialog();
+
+                    if (ppmPrompt.ppm > -1){
+                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(ppmPrompt.ppm));
+                        decompressedContainer = convert.NonPpmToPpm(ppmPrompt.ppm);
                     } else {
                         compressedContainer = compresser.Compress(convert.NonPpmToPpm(1));
                         decompressedContainer = convert.NonPpmToPpm(1);

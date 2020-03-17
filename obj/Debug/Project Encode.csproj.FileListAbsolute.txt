@@ -36,3 +36,24 @@ C:\Users\MCA\source\repos\Project Encode\obj\Debug\ConfirmCompress.g.cs
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\ConfirmCompress.baml
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\ProgressBar.g.cs
 C:\Users\MCA\source\repos\Project Encode\obj\Debug\ProgressBar.baml
+D:\Code stuff\C#\PPM-Encoder\bin\Debug\Project Encode.exe.config
+D:\Code stuff\C#\PPM-Encoder\bin\Debug\Project Encode.exe
+D:\Code stuff\C#\PPM-Encoder\bin\Debug\Project Encode.pdb
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.csprojAssemblyReference.cache
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\ConfirmCompress.g.cs
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\MainWindow.g.cs
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\PopupInput.g.cs
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\ProgressBar.g.cs
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\App.g.cs
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode_MarkupCompile.cache
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode_MarkupCompile.lref
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\ConfirmCompress.baml
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\MainWindow.baml
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\PopupInput.baml
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\ProgressBar.baml
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.g.resources
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project_Encode.Properties.Resources.resources
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.csproj.GenerateResource.cache
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.csproj.CoreCompileInputs.cache
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.exe
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.pdb

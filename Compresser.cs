@@ -17,7 +17,6 @@ namespace Project_Encode {
 
         //when decompressing bytes, always put at least 1 before the pixel color data, and each grouping.
         //this way, we can copy the run of pixels as well as the colors
-        ProgressBar pbWin;
         public Compresser() {            
         }
         public Container Compress(Container container) {
