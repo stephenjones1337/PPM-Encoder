@@ -39,7 +39,7 @@ namespace Project_Encode {
         //INSTANCES
             Container result = new Container();
             Dictionary<string, int> dictionary = new Dictionary<string, int>();
-            List<int> lst_encoded_putput = new List<int>();
+            List<int> lst_encoded_output = new List<int>();
 
             //build new header
 
@@ -56,7 +56,7 @@ namespace Project_Encode {
                 StringBuilder decompressed = new StringBuilder();
 
                 while(container.ByteData.Count > 0) {
-                    decompressed.Append(container.ByteData.Dequeue().ToString()+'\n');
+                    decompressed.Append($"{container.ByteData.Dequeue()}\n");
                 }
 
                 data = decompressed.ToString();
@@ -79,7 +79,7 @@ namespace Project_Encode {
                     subsequence_position = dictionary[sub_sequence];
                     
                     //THEN STORE THAT POSITION INTO OUR ENCODED OUTPUT
-                    lst_encoded_putput.Add(subsequence_position);
+                    lst_encoded_output.Add(subsequence_position);
 
                     //ADD OUR CURRENTLY "UNSEEN" SEQUENCE INTO OUR DICTIONARY
                     dictionary.Add(current_sequence, dictionary.Count);
@@ -91,19 +91,19 @@ namespace Project_Encode {
 
         // IF WE HAVE A REMAINING SUB_SEQUENCE ENCODE IT TOO
             if (sub_sequence.Length > 0){
-                lst_encoded_putput.Add(dictionary[sub_sequence]);
+                lst_encoded_output.Add(dictionary[sub_sequence]);
             }//end if
 
             if (byteData) {
                 result.ByteData = new Queue<byte>();
-                foreach(byte num in lst_encoded_putput) {
-                    result.ByteData.Enqueue(num);
+                foreach(int num in lst_encoded_output) {
+                    result.ByteData.Enqueue((byte)num);
                 }
                 result.AsciiData = "";
             } else {
                 //add ascii body
                 StringBuilder str = new StringBuilder();
-                foreach(int num in lst_encoded_putput) {
+                foreach(int num in lst_encoded_output) {
                     str.Append(num.ToString()+",");
                 }
 
