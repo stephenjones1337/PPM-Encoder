@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Code stuff\C#\PPM-Encoder\App.xaml
-2-271882003
+5-414247114
 
-13-1763791422
+154123625
 151397803362
-MainWindow.xaml;PopupInput.xaml;
+ConfirmCompress.xaml;MainWindow.xaml;PopupInput.xaml;ProgressBar.xaml;PromptPpmType.xaml;
 
-True
+False
 

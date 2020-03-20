@@ -20,19 +20,105 @@ namespace Project_Encode {
         public Compresser() {            
         }
         public Container Compress(Container container) {
+            
             if (container.Header[1] == '3') {
-                return CompressAscii(container);
+                return RLEAscii(container);
             } else if(container.Header[1] == '6') {
-                return CompressBytes(container);
-            } else {                
-                return null;
+                return RLEBytes(container);
             }
+            
+            return null;
         }
-        private Container CompressAscii(Container container) {
+        public Container LzwCompression(Container container) {
+            //VARIABLES
+            string sub_sequence          = "";
+            string current_sequence      = "";
+            bool   current_sequence_seen = false;
+            int    subsequence_position  = 0;
+
+        //INSTANCES
+            Container result = new Container();
+            Dictionary<string, int> dictionary = new Dictionary<string, int>();
+            List<int> lst_encoded_putput = new List<int>();
+
+            //build new header
+
+        //BUILD THE INITIAL DICTIONARY --- ENCODE EACH ASCII CHAR AND ITS VALUE TO A SLOT
+            for (int index = 0; index < 128; index += 1) {
+                    char letter = (char)index;
+                    dictionary.Add(letter.ToString(), index);
+            }//end for
+
+            string data;
+            bool byteData = false;
+
+            if (container.ByteData.Count > 0) {
+                StringBuilder decompressed = new StringBuilder();
+
+                while(container.ByteData.Count > 0) {
+                    decompressed.Append(container.ByteData.Dequeue().ToString()+'\n');
+                }
+
+                data = decompressed.ToString();
+                byteData = true;
+            } else {
+                data = container.AsciiData;
+            }
+
+            foreach (char current_letter in data) {
+                //BUILD THE CURRENT SEQUENCE
+                current_sequence = sub_sequence + current_letter;
+
+                //DETERMINE IF THE CURRENT SEQUENCE IS IN OUR DICTIONARY
+                current_sequence_seen = dictionary.ContainsKey(current_sequence);
+
+                if (current_sequence_seen) {
+                    sub_sequence = current_sequence; //since we saw this make it the new sub_sequence
+                }else{
+                    //SINCE WE HAVENT SEEN THIS CURRENT SEQUENCE FIND THE POSITION OF THE SUBSEQUENCE WE KNOW IS IN THE DICTIONARY 
+                    subsequence_position = dictionary[sub_sequence];
+                    
+                    //THEN STORE THAT POSITION INTO OUR ENCODED OUTPUT
+                    lst_encoded_putput.Add(subsequence_position);
+
+                    //ADD OUR CURRENTLY "UNSEEN" SEQUENCE INTO OUR DICTIONARY
+                    dictionary.Add(current_sequence, dictionary.Count);
+
+                    //START TRYING TO BUILD A NEW SEQUENCE FROM THE CURRENT LETTER
+                    sub_sequence = current_letter.ToString();
+                }//end if
+            }//end for
+
+        // IF WE HAVE A REMAINING SUB_SEQUENCE ENCODE IT TOO
+            if (sub_sequence.Length > 0){
+                lst_encoded_putput.Add(dictionary[sub_sequence]);
+            }//end if
+
+            if (byteData) {
+                result.ByteData = new Queue<byte>();
+                foreach(byte num in lst_encoded_putput) {
+                    result.ByteData.Enqueue(num);
+                }
+                result.AsciiData = "";
+            } else {
+                //add ascii body
+                StringBuilder str = new StringBuilder();
+                foreach(int num in lst_encoded_putput) {
+                    str.Append(num.ToString()+",");
+                }
+
+                result.AsciiData = str.ToString();
+                result.ByteData = new Queue<byte>();
+            }
+
+            result.Header = ChangeHeaderLZW(container, byteData);
+            return result;
+        }//end function
+        private Container RLEAscii(Container container) {
             List<Color> colList = AsciiToColorList(container);
             return CompressListForAscii(colList, container);
         }
-        private Container CompressBytes(Container container) {
+        private Container RLEBytes(Container container) {
             List<Color> colList = BytesToColorList(container);
             return CompressListForBytes(colList, container);
         }
@@ -173,6 +259,21 @@ namespace Project_Encode {
             foreach (char item in headerArr) {
                 str.Append(item);
             }
+            return str.ToString();
+        }
+        private string ChangeHeaderLZW(Container container, bool byteData) {
+            StringBuilder str = new StringBuilder();
+
+            if (byteData) {
+                str.Append("P10\n");                
+
+            } else {
+                str.Append("P9\n");
+            }
+            for (int i = 3; i < container.Header.Length; i++) {
+                str.Append(container.Header[i]);
+            }
+
             return str.ToString();
         }
     }

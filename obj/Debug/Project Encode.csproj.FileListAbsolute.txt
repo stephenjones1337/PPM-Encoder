@@ -57,3 +57,5 @@ D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.csproj.GenerateResource.ca
 D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.csproj.CoreCompileInputs.cache
 D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.exe
 D:\Code stuff\C#\PPM-Encoder\obj\Debug\Project Encode.pdb
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\PromptPpmType.g.cs
+D:\Code stuff\C#\PPM-Encoder\obj\Debug\PromptPpmType.baml

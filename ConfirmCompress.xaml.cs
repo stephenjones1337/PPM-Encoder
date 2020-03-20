@@ -1,38 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Project_Encode {
     /// <summary>
     /// Interaction logic for ConfirmCompress.xaml
     /// </summary>
     public partial class ConfirmCompress : Window {
-        public bool chooseCompress;
-        public ConfirmCompress(int compressNum, int decompressNum) {
+        public int chooseCompress = 0;
+        public ConfirmCompress(int RLEcompressNum, int decompressNum, int LZWcompressNum) {
             InitializeComponent();
+            btnOK.IsEnabled = false;
 
-            txtCompress.Text = compressNum.ToString() + " bytes";
-            txtDecompress.Text = decompressNum.ToString() + " bytes";
+            txtRleCompress.Text = RLEcompressNum.ToString() + " bytes";
+            txtLzwCompress.Text = LZWcompressNum.ToString() + " bytes";
+            txtDecompress.Text  = decompressNum.ToString()  + " bytes";
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e) {
-            chooseCompress = true;
             this.Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e) {
-            chooseCompress = false;
+            chooseCompress = 0;
             this.Close();
+        }
+
+        private void TogRLE_Checked(object sender, RoutedEventArgs e) {
+            btnOK.IsEnabled = true;
+            chooseCompress  = 1;
+        }
+
+        private void TogLZW_Checked(object sender, RoutedEventArgs e) {
+            btnOK.IsEnabled = true;
+            chooseCompress  = 2;
+        }
+
+        private void TogNONE_Checked(object sender, RoutedEventArgs e) {
+            btnOK.IsEnabled = true;
+            chooseCompress  = 0;
         }
     }
 }

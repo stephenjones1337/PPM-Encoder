@@ -65,42 +65,41 @@ namespace Project_Encode {
 
             //if bitmap exists, convert to PPM and save file
             if (temp != null) {
-                Container compressedContainer;
+                Container RleContainer;
+                Container LzwContainer;
                 Container decompressedContainer;
                 ConvertPPM convert = new ConvertPPM(temp);
                 convert.File = currentPath;
+
                 //get compressed and decompressed containers
-                Compresser compresser = new Compresser();                
-                if (fileHandler.IsPPM) {
-                    compressedContainer = compresser.Compress(convert.BitmapToPPM());
-                    decompressedContainer = convert.BitmapToPPM();
+                Compresser compresser = new Compresser();
+                PromptPpmType ppmPrompt = new PromptPpmType();
+                ppmPrompt.ShowDialog();
 
+                if (ppmPrompt.ppm > -1) {
+                    RleContainer = compresser.Compress(convert.BitmapConversion(ppmPrompt.ppm));
+                    LzwContainer = compresser.LzwCompression(convert.BitmapConversion(ppmPrompt.ppm));
+                    decompressedContainer = convert.BitmapConversion(ppmPrompt.ppm);
                 } else {
-                    //ask what ppm file user would like to create
-                    PromptPpmType ppmPrompt = new PromptPpmType();
-                    ppmPrompt.ShowDialog();
-
-                    if (ppmPrompt.ppm > -1){
-                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(ppmPrompt.ppm));
-                        decompressedContainer = convert.NonPpmToPpm(ppmPrompt.ppm);
-                    } else {
-                        compressedContainer = compresser.Compress(convert.NonPpmToPpm(1));
-                        decompressedContainer = convert.NonPpmToPpm(1);
-                    }
+                    RleContainer = compresser.Compress(convert.BitmapConversion(1));
+                    LzwContainer = compresser.LzwCompression(convert.BitmapConversion(1));
+                    decompressedContainer = convert.BitmapConversion(1);
                 }
 
                 //get the byte size of each
-                int compressedBytes = ContainerByteSize(compressedContainer);
+                int RleBytes = ContainerByteSize(RleContainer);
+                int LzwBytes = ContainerByteSize(LzwContainer);
                 int decompressedBytes = ContainerByteSize(decompressedContainer);
 
                 //show comparison to user and allow them to choose
-                ConfirmCompress popup = new ConfirmCompress(compressedBytes, decompressedBytes);
+                ConfirmCompress popup = new ConfirmCompress(RleBytes, decompressedBytes, LzwBytes);
                 popup.Owner = this;
                 popup.ShowDialog();
                 
-                if (popup.chooseCompress) {
-                   
-                    fileHandler.SaveFile(compressedContainer);
+                if (popup.chooseCompress == 1) {                   
+                    fileHandler.SaveFile(RleContainer);
+                } else if (popup.chooseCompress == 2){
+                    fileHandler.SaveFile(LzwContainer);
                 } else {
                     fileHandler.SaveFile(decompressedContainer);
                 }

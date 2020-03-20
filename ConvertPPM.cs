@@ -40,7 +40,7 @@ namespace Project_Encode {
             return BuildPPM(PpmCheck());
 
         }
-        public Container NonPpmToPpm(int ppmType) {
+        public Container BitmapConversion(int ppmType) {
             PopulateArray(myMap);
             return BuildPPM(ppmType);
         }
