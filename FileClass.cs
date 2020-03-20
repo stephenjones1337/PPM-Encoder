@@ -25,6 +25,7 @@ namespace Project_Encode {
             openFile = new OpenFileDialog{ 
                 Filter = "PPM (*.PPM)|*.PPM|All files (*.*)|*.*" 
             };
+
             try {
                 if (openFile.ShowDialog() == DialogResult.OK) {
                     FilePath = openFile.FileName;

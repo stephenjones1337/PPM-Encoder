@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="Progress Bar" Height="100" Width="300">
     <Grid Margin="20,25">
-        <ProgressBar x:Name="pbStatus"/>
+        <ProgressBar x:Name="pbStatus" Minimum="0" Maximum="100" Value="{Binding WorkerState}"/>
     </Grid>
 </Window>

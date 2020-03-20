@@ -75,7 +75,7 @@ namespace Project_Encode {
                 Compresser compresser = new Compresser();
                 PromptPpmType ppmPrompt = new PromptPpmType();
                 ppmPrompt.ShowDialog();
-
+                //ProgressBar pb = new ProgressBar(100);
                 if (ppmPrompt.ppm > -1) {
                     RleContainer = compresser.Compress(convert.BitmapConversion(ppmPrompt.ppm));
                     LzwContainer = compresser.LzwCompression(convert.BitmapConversion(ppmPrompt.ppm));
