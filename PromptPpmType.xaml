@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project_Encode"
         mc:Ignorable="d"
-        Title="PPM Type" Height="150" Width="150">
+        Title="PPM Type" Height="150" Width="150" ResizeMode="NoResize">
     <Grid>
         <Label Content="Ascii" HorizontalAlignment="Left" Margin="30,19,0,0" VerticalAlignment="Top"/>
         <Label Content="Raw" HorizontalAlignment="Left" Margin="30,55,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.077"/>

@@ -10,9 +10,9 @@ namespace Project_Encode {
             InitializeComponent();
             btnOK.IsEnabled = false;
 
-            txtRleCompress.Text = RLEcompressNum.ToString() + " bytes";
-            txtLzwCompress.Text = LZWcompressNum.ToString() + " bytes";
-            txtDecompress.Text  = decompressNum.ToString()  + " bytes";
+            txtRleCompress.Text = (RLEcompressNum/1000).ToString() + " kbs";
+            txtLzwCompress.Text = (LZWcompressNum/1000).ToString() + " kbs";
+            txtDecompress.Text  = (decompressNum/1000).ToString()  + " kbs";
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e) {

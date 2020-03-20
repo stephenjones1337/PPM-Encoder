@@ -30,31 +30,29 @@ namespace Project_Encode {
             return null;
         }
         public Container LzwCompression(Container container) {
-            //VARIABLES
-            string sub_sequence          = "";
-            string current_sequence      = "";
-            bool   current_sequence_seen = false;
+            string subSequence          = "";
+            string currentSequence      = "";
+            bool   currentSequenceSeen = false;
             int    subsequence_position  = 0;
 
-        //INSTANCES
             Container result = new Container();
             Dictionary<string, int> dictionary = new Dictionary<string, int>();
-            List<int> lst_encoded_output = new List<int>();
+            List<int> encodedOutput = new List<int>();
 
-            //build new header
-
-        //BUILD THE INITIAL DICTIONARY --- ENCODE EACH ASCII CHAR AND ITS VALUE TO A SLOT
+            //build the dictionary from "ascii table"
             for (int index = 0; index < 128; index += 1) {
                     char letter = (char)index;
                     dictionary.Add(letter.ToString(), index);
-            }//end for
+            }
 
             string data;
             bool byteData = false;
 
+            //assign to data from container
             if (container.ByteData.Count > 0) {
                 StringBuilder decompressed = new StringBuilder();
 
+                //copy each byte, add newline for decompression
                 while(container.ByteData.Count > 0) {
                     decompressed.Append($"{container.ByteData.Dequeue()}\n");
                 }
@@ -65,45 +63,46 @@ namespace Project_Encode {
                 data = container.AsciiData;
             }
 
-            foreach (char current_letter in data) {
-                //BUILD THE CURRENT SEQUENCE
-                current_sequence = sub_sequence + current_letter;
+            foreach (char currentLetter in data) {
+                //build the current sequence
+                currentSequence = subSequence + currentLetter;
 
-                //DETERMINE IF THE CURRENT SEQUENCE IS IN OUR DICTIONARY
-                current_sequence_seen = dictionary.ContainsKey(current_sequence);
+                //determine if the current sequence is in dictionary
+                currentSequenceSeen = dictionary.ContainsKey(currentSequence);
 
-                if (current_sequence_seen) {
-                    sub_sequence = current_sequence; //since we saw this make it the new sub_sequence
+                if (currentSequenceSeen) {
+                    subSequence = currentSequence; //since we saw this make it the new subSequence
                 }else{
-                    //SINCE WE HAVENT SEEN THIS CURRENT SEQUENCE FIND THE POSITION OF THE SUBSEQUENCE WE KNOW IS IN THE DICTIONARY 
-                    subsequence_position = dictionary[sub_sequence];
+                    //find the position of the subsequence we know is in the dictionary 
+                    subsequence_position = dictionary[subSequence];
                     
-                    //THEN STORE THAT POSITION INTO OUR ENCODED OUTPUT
-                    lst_encoded_output.Add(subsequence_position);
+                    //add that position to encoded output
+                    encodedOutput.Add(subsequence_position);
 
-                    //ADD OUR CURRENTLY "UNSEEN" SEQUENCE INTO OUR DICTIONARY
-                    dictionary.Add(current_sequence, dictionary.Count);
+                    //add "unseen" sequence into dictionary
+                    dictionary.Add(currentSequence, dictionary.Count);
 
-                    //START TRYING TO BUILD A NEW SEQUENCE FROM THE CURRENT LETTER
-                    sub_sequence = current_letter.ToString();
-                }//end if
-            }//end for
+                    //start trying to build a new sequence from the current letter
+                    subSequence = currentLetter.ToString();
+                }
+            }
 
-        // IF WE HAVE A REMAINING SUB_SEQUENCE ENCODE IT TOO
-            if (sub_sequence.Length > 0){
-                lst_encoded_output.Add(dictionary[sub_sequence]);
-            }//end if
+            // if we have a remaining subSequence encode it too
+            if (subSequence.Length > 0){
+                encodedOutput.Add(dictionary[subSequence]);
+            }
 
+            //add data to proper slots in container
             if (byteData) {
                 result.ByteData = new Queue<byte>();
-                foreach(int num in lst_encoded_output) {
+                foreach(int num in encodedOutput) {
                     result.ByteData.Enqueue((byte)num);
                 }
                 result.AsciiData = "";
             } else {
                 //add ascii body
                 StringBuilder str = new StringBuilder();
-                foreach(int num in lst_encoded_output) {
+                foreach(int num in encodedOutput) {
                     str.Append(num.ToString()+",");
                 }
 

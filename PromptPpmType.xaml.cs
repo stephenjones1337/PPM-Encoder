@@ -17,7 +17,7 @@ namespace Project_Encode {
     /// Interaction logic for PromptPpmType.xaml
     /// </summary>
     public partial class PromptPpmType : Window {
-        public int ppm = -1;
+        public int ppm = 1;
         public PromptPpmType() {
             InitializeComponent();
         }

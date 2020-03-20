@@ -44,7 +44,9 @@ namespace Project_Encode {
                     imgBox.Source = bmpConvert.ConvertToImageSource();
                     //save path for savefile later
                     currentPath = fileHandler.FilePath;
+                    //calculate increment
                     letterIncrement = (int)Math.Round(((double)bitty.Width/5) + ((double)bitty.Height/5)/5);
+                    //calculate message box max length
                     maxLength = ((bitty.Width * bitty.Height) / letterIncrement)-1;
                     isLoaded = true;
                 }
@@ -65,33 +67,29 @@ namespace Project_Encode {
 
             //if bitmap exists, convert to PPM and save file
             if (temp != null) {
+                PromptPpmType ppmPrompt = new PromptPpmType();
+                Compresser compresser = new Compresser();
                 Container RleContainer;
                 Container LzwContainer;
                 Container decompressedContainer;
                 ConvertPPM convert = new ConvertPPM(temp);
                 convert.File = currentPath;
+                
+                //get file type from user (ascii/raw)
+                ppmPrompt.ShowDialog();
 
                 //get compressed and decompressed containers
-                Compresser compresser = new Compresser();
-                PromptPpmType ppmPrompt = new PromptPpmType();
-                ppmPrompt.ShowDialog();
-                //ProgressBar pb = new ProgressBar(100);
-                if (ppmPrompt.ppm > -1) {
-                    RleContainer = compresser.Compress(convert.BitmapConversion(ppmPrompt.ppm));
-                    LzwContainer = compresser.LzwCompression(convert.BitmapConversion(ppmPrompt.ppm));
-                    decompressedContainer = convert.BitmapConversion(ppmPrompt.ppm);
-                } else {
-                    RleContainer = compresser.Compress(convert.BitmapConversion(1));
-                    LzwContainer = compresser.LzwCompression(convert.BitmapConversion(1));
-                    decompressedContainer = convert.BitmapConversion(1);
-                }
+                Container tempContainer = convert.BitmapConversion(ppmPrompt.ppm);
+                RleContainer = compresser.Compress(tempContainer);
+                LzwContainer = compresser.LzwCompression(tempContainer);
+                decompressedContainer = tempContainer;
 
                 //get the byte size of each
                 int RleBytes = ContainerByteSize(RleContainer);
                 int LzwBytes = ContainerByteSize(LzwContainer);
                 int decompressedBytes = ContainerByteSize(decompressedContainer);
 
-                //show comparison to user and allow them to choose
+                //show comparison, choose compression
                 ConfirmCompress popup = new ConfirmCompress(RleBytes, decompressedBytes, LzwBytes);
                 popup.Owner = this;
                 popup.ShowDialog();
@@ -160,7 +158,6 @@ namespace Project_Encode {
                 if (popupInput != null) {
                     //grab message (dummy check)
                     message = popupInput.result;
-                    FileClass fh = new FileClass();
                     
                     //pass args to encoder
                     Encode myEncoder = new Encode(message, bitty, startPoint, letterIncrement);

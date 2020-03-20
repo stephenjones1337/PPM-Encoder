@@ -28,19 +28,20 @@ namespace Project_Encode {
 
             try {
                 if (openFile.ShowDialog() == DialogResult.OK) {
+                    //get the cchosen file path
                     FilePath = openFile.FileName;
                     openFile.Dispose();
                     if (CheckExtension(FilePath)) {
                         _isPPM = true;
+                        //pass target to convertPPM class
                         ConvertPPM conv = new ConvertPPM(FilePath);
+                        //convert to bitmap
                         return conv.PPMtoBitmap();
                     } else {
                         _isPPM = false;
+                        //convert to bitmap
                         return new Bitmap(FilePath);
                     }
-                    //var binRead = new BinaryReader(new FileStream(FilePath, FileMode.Open));
-                    //Debug.WriteLine(binRead.BaseStream.Length + "bytes in original file.");
-                    //binRead.Close();
                 }
                 return null;
 

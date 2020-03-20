@@ -35,11 +35,6 @@ namespace Project_Encode {
                 return P6Conversion();
             }
         }
-        public Container BitmapToPPM() {
-            PopulateArray(myMap);
-            return BuildPPM(PpmCheck());
-
-        }
         public Container BitmapConversion(int ppmType) {
             PopulateArray(myMap);
             return BuildPPM(ppmType);
@@ -47,7 +42,45 @@ namespace Project_Encode {
         #region PRIVATES
         #region BINARY STUFF
         private Bitmap P3Conversion() {
-            Bitmap bitmap;
+            
+            //create bitmap
+            Bitmap bitmap = CreateBitmap();
+
+            //fill bitmap
+            for (int y = 0; y < bitmap.Height; y++) {
+                for (int x = 0; x < bitmap.Width; x++) {
+
+                    int r = RGBGrabber(),
+                        g = RGBGrabber(),
+                        b = RGBGrabber();
+
+                    Color col = Color.FromArgb(r,g,b);                        
+                    bitmap.SetPixel(x,y,col);
+                }
+            }
+
+            reader.Close();
+            return bitmap;
+        }
+        private Bitmap P6Conversion() {
+           //create bitmap
+            Bitmap bitmap = CreateBitmap();
+
+            //fill bitmap
+            for (int y = 0; y < bitmap.Height; y++) {
+                for (int x = 0; x < bitmap.Width; x++) {
+                    int r = Convert.ToInt32(reader.ReadByte()),
+                        g = Convert.ToInt32(reader.ReadByte()),
+                        b = Convert.ToInt32(reader.ReadByte());
+                    
+                    Color col = Color.FromArgb(r,g,b);                        
+                    bitmap.SetPixel(x,y,col);
+                }
+            }
+            reader.Close();
+            return bitmap;
+        }
+        private Bitmap CreateBitmap() {
             string widths = "", heights = "";
             int width, height;
             char temp;
@@ -79,73 +112,7 @@ namespace Project_Encode {
             height = int.Parse(heights);
             
             //create bitmap
-            bitmap = new Bitmap(width, height);
-
-            //fill bitmap
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-
-                    int r = RGBGrabber(),
-                        g = RGBGrabber(),
-                        b = RGBGrabber();
-
-                    Color col = Color.FromArgb(r,g,b);                        
-                    bitmap.SetPixel(x,y,col);
-                }
-            }
-
-            reader.Close();
-            return bitmap;
-        }
-        private Bitmap P6Conversion() {
-            Bitmap bitmap;
-            string widths = "", heights = "";
-            int width, height;
-            char temp;
-
-            //eat new line
-            reader.ReadChar();
-
-            //eat comment
-            while(reader.ReadChar() != '\n') {
-                // ?
-            }
-
-            //grab the width and height of the img
-            while((temp = reader.ReadChar()) != ' ') {
-                widths += temp;
-            }
-            while((temp = reader.ReadChar()) >= '0' && temp <= '9') {
-                heights += temp;
-            }
-            
-            //check color spec or whatever
-            if (reader.ReadChar() != '2' || reader.ReadChar() != '5' || reader.ReadChar() != '5')
-                return null;
-            
-            //Eat the last newline
-            reader.ReadChar(); 
-            
-            //save the bitmap size
-            width = int.Parse(widths);
-            height = int.Parse(heights);
-            
-            //create bitmap
-            bitmap = new Bitmap(width, height);
-            
-            //fill bitmap
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int r = Convert.ToInt32(reader.ReadByte()),
-                        g = Convert.ToInt32(reader.ReadByte()),
-                        b = Convert.ToInt32(reader.ReadByte());
-                    
-                    Color col = Color.FromArgb(r,g,b);                        
-                    bitmap.SetPixel(x,y,col);
-                }
-            }
-            reader.Close();
-            return bitmap;
+            return new Bitmap(width, height);
         }
         private int RGBGrabber() {
             char temp;
@@ -159,7 +126,6 @@ namespace Project_Encode {
         #endregion
         #region ASCII STUFF
         private int PpmCheck() {
-            //Debug.WriteLine(File);
             reader = new BinaryReader(new FileStream(File, FileMode.Open));
             //get the first two chars of the file
             char[] id = reader.ReadChars(2);
@@ -241,8 +207,6 @@ namespace Project_Encode {
             }
             myContainer.AsciiData = str.ToString();
             myContainer.ByteData = myBytes;
-            //TODO: take byte count and compare to post compression to see what you want to save
-            Debug.WriteLine($"{myBytes.Count} bytes saved myBytes");
             return myContainer;
         }
         private StringBuilder BuildStart(int ppmType, StringBuilder str) {
